@@ -30,9 +30,6 @@ class Correios(object):
         self.SEDEX = 40010
         self.SEDEX_10 = 40215
         self.SEDEX_HOJE = 40290
-        self.E_SEDEX = 81019
-        self.OTE = 44105
-        self.NORMAL = 41017
         self.SEDEX_A_COBRAR = 40045
 
     def _getDados(self,tags_name, dom):
@@ -47,11 +44,10 @@ class Correios(object):
 
         return dados
 
-    def frete(self,cod,GOCEP,HERECEP,peso,
-              comprimento,diametro,toback='xml'):
+    def frete(self, cep_origem, cep_destino, peso, comprimento, altura, largura, cod_servico, codempresa=0, senha=0, diametro=0):
     
-        url = "http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?StrRetorno=%s&nCdServico=%s&nVlPeso=%i&sCepOrigem=%s&sCepDestino=%s&nVlComprimento=%s&nVlDiametro=%s" % (toback,cod,peso,HERECEP,
-                                   GOCEP,comprimento,diametro)
+        url = 'http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?nCdEmpresa=%d&sDsSenha=%d&sCepOrigem=%s&sCepDestino=%s&nVlPeso=%d&nCdFormato=1&nVlComprimento=%d&nVlAltura=%d&nVlLargura=%d&sCdMaoPropria=n&nVlValorDeclarado=0&sCdAvisoRecebimento=n&nCdServico=%d&nVlDiametro=%d&StrRetorno=xml&nIndicaCalculo=3' % (codempresa, 
+                       senha, cep_origem, cep_destino, peso, comprimento, altura, largura, cod_servico, diametro)
         dom = minidom.parse(urllib2.urlopen(url))
     
         tags_name = ('MsgErro',
